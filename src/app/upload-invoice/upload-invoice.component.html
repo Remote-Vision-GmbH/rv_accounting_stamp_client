@@ -1,0 +1,14 @@
+<!--<form id="pdfForm" class="form">
+  <input type="file" id="pdfUpload" accept=".pdf" class="form-control" required (change)="onFileChange($event)" />
+  <button type="submit" class="btn btn-primary" (click)="uploadFile()">Upload</button>
+</form>-->
+
+<pdf-viewer [src]="pdfSrc"
+            [render-text]="true"
+            [original-size]="false"
+            [zoom]="currentZoom"
+            class="viewer"
+            [class.zoomIn]="currentZoom === 1"
+            [class.zoomOut]="currentZoom !== 1"
+            (click)="zoomFile()"
+></pdf-viewer>

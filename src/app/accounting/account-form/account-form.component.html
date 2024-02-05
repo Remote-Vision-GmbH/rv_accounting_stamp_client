@@ -1,0 +1,50 @@
+
+<form [formGroup]="accountingForm" (ngSubmit)="submitAccounting()">
+  <input type="text" placeholder="Rechnungsname" class="form-control" formControlName="invoice">
+  <ng-container formArrayName="accountings">
+    <ng-container *ngFor="let accounting of getAccountings(); let i = index">
+
+        <div class="form-group" [formGroupName]="i" [id]="i">
+          <div class="soll">
+            <input type="text" class="form-control" formControlName="soll">
+          </div>
+          <div class="haben">
+            <input type="text" class="form-control" formControlName="haben">
+          </div>
+
+          <div class="amount">
+            <input type="text" class="form-control" formControlName="amount">
+          </div>
+
+          <div class="tax">
+            <input type="text" class="form-control" formControlName="tax">
+          </div>
+          <div class="delete">
+            <button (click)="deleteAccounting(i)" class="btn btn-danger">löschen</button>
+          </div>
+        </div>
+
+    </ng-container>
+  </ng-container>
+  <button class="btn btn-secondary my-2" (click)="addAccounting()">Neue Buchung</button>
+  <h3>Vorschau Kontierung</h3>
+  <table class="table border border-1 w-75">
+    <thead>
+    <tr>
+      <th scope="col">Soll</th>
+      <th scope="col">Haben</th>
+      <th scope="col">Betrag</th>
+      <th scope="col">MwSt.</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let accountingItem of getAccountings()">
+      <th scope="row">{{accountingItem.value['soll']}}</th>
+      <td>{{accountingItem.value['haben']}}</td>
+      <td>{{accountingItem.value['amount']}}</td>
+      <td>{{accountingItem.value['tax']}}</td>
+    </tr>
+  </table>
+  <button class="btn btn-success my-2" (click)="saveAndLoad(accountingForm)">Speichern und runterladen</button>
+</form>
+

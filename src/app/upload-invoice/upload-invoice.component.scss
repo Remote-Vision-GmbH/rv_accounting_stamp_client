@@ -1,0 +1,18 @@
+.form {
+  display: flex;
+  flex-direction: row;
+}
+.viewer {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 10px 2px lightgray;
+  border-radius: 10px;
+}
+
+.viewer.zoomIn {
+  cursor: zoom-in;
+}
+
+.viewer.zoomOut {
+  cursor: zoom-out;
+}
