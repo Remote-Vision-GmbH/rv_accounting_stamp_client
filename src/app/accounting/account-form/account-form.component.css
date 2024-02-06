@@ -1,0 +1,13 @@
+form .form-group {
+  display: grid;
+  grid-template-columns: repeat(2, 100px) repeat(2, 150px) 50px;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.accounting-preview {
+  border: 1px solid lightgray;
+  padding: 1rem;
+}
+
+/*# sourceMappingURL=account-form.component.css.map */
