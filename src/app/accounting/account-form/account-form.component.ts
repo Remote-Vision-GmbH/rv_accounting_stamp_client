@@ -4,6 +4,11 @@ import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {SaveAndStampComponent} from "../../shared/save-and-stamp/save-and-stamp.component";
 
+import * as htmlToImage from 'html-to-image';
+import {HttpClient} from "@angular/common/http";
+
+
+
 @Component({
   selector: 'app-account-form',
   templateUrl: './account-form.component.html',
@@ -11,10 +16,12 @@ import {SaveAndStampComponent} from "../../shared/save-and-stamp/save-and-stamp.
 })
 export class AccountFormComponent {
   public accountingForm: FormGroup = this.createForm();
+  stamp: HTMLImageElement;
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private http: HttpClient
 
   ) {
   }
@@ -60,4 +67,16 @@ export class AccountFormComponent {
       height: '300px'
     })
   }
+
+  toPng(filename: string){
+    const image = htmlToImage.toPng(document.getElementById('accounting-preview')!)
+
+    image.then( dataUrl => {
+      const img = new Image();
+      img.src = dataUrl
+      return img;
+    })
+
+  }
+
 }

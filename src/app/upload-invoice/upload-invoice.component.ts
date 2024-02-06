@@ -1,41 +1,59 @@
 import { Component } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
+
+import { HttpClient } from "@angular/common/http";
+import {AccountingService} from "../services/accounting.service";
+
 @Component({
   selector: 'app-upload-invoice',
   templateUrl: './upload-invoice.component.html',
   styleUrl: './upload-invoice.component.scss'
 })
 export class UploadInvoiceComponent {
-  pdfSrc = 'assets/sample.pdf';
+
 /*  pdfSrc = 'http://localhost:3000/public/uploads/20240103_10000200000127379011.pdf'*/
   formData: FormData;
   currentZoom = 1;
-  mouseEventTracker = document.getElementById('viewer')
 
-  constructor(private  http: HttpClient) {
+  pdfSrc: string = '';
+  selectedFile: File | null = null;
+  filename: string;
+
+  constructor(
+
+    private accountingService: AccountingService,
+    private http: HttpClient
+  ) {
     this.formData = new FormData();
-
   }
 
-  onFileChange(event: any) {
-    console.log(event.target.files[0]);
-    const file = event.target.files[0];
-    if(file.type !== 'application/pdf') {
-      console.error('Please load a PDF file');
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
+  uploadFile(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
+    if (!this.selectedFile) {
       return;
     }
 
-    this.formData.append('pdf', file);
-  }
+    const formData = new FormData();
+    formData.append('file', this.selectedFile, this.selectedFile.name);
 
-  uploadFile() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json'
-      }),
-      observe: 'response' as 'response'
-    };
-    return this.http.post('http://localhost:3000/upload', this.formData, httpOptions)
+    this.http.post<{name: string}>('http://localhost:3000/upload', formData, {
+      headers: {
+        'Accept': 'application/json',
+      },
+      responseType: 'json',
+    })
+      .subscribe({
+        next: (response) => {
+          this.filename = response.name;
+          this.pdfSrc = `http://localhost:3000/file/${this.filename}`;
+        },
+        error: (error) => console.error(error)
+      });
   }
 
   zoomFile() {
@@ -44,7 +62,6 @@ export class UploadInvoiceComponent {
     } else {
       this.currentZoom = 1.75
     }
-
   }
 
 

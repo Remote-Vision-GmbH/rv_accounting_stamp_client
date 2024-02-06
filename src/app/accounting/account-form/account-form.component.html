@@ -28,7 +28,8 @@
   </ng-container>
   <button class="btn btn-secondary my-2" (click)="addAccounting()">Neue Buchung</button>
   <h3>Vorschau Kontierung</h3>
-  <table class="table border border-1 w-75">
+  <div class="accounting-preview" id="accounting-preview" (click)="toPng('Kontierungsstempel')">
+  <table class="table border border-1">
     <thead>
     <tr>
       <th scope="col">Soll</th>
@@ -39,12 +40,14 @@
     </thead>
     <tbody>
     <tr *ngFor="let accountingItem of getAccountings()">
-      <th scope="row">{{accountingItem.value['soll']}}</th>
+      <td>{{accountingItem.value['soll']}}</td>
       <td>{{accountingItem.value['haben']}}</td>
       <td>{{accountingItem.value['amount']}}</td>
       <td>{{accountingItem.value['tax']}}</td>
     </tr>
   </table>
+  </div>
   <button class="btn btn-success my-2" (click)="saveAndLoad(accountingForm)">Speichern und runterladen</button>
+  <button class="btn btn-success my-2" (click)="toPng('Kontierungsstempel')">Stempeln</button>
 </form>
 
