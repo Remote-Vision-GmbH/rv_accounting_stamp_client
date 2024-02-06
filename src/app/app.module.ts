@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SaveAndStampComponent } from './shared/save-and-stamp/save-and-stamp.component';
 import {MatDialogActions, MatDialogClose, MatDialogContent} from "@angular/material/dialog";
 import {MatButton} from "@angular/material/button";
+import { StampPositioningDirective } from './stamp-positioning.directive';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import {MatButton} from "@angular/material/button";
     FilledFormComponent,
     AccountingComponent,
     SaveAndStampComponent,
+    StampPositioningDirective,
 
   ],
   imports: [

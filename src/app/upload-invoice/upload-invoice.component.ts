@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
-
 @Component({
   selector: 'app-upload-invoice',
   templateUrl: './upload-invoice.component.html',
@@ -10,10 +9,12 @@ export class UploadInvoiceComponent {
   pdfSrc = 'assets/sample.pdf';
 /*  pdfSrc = 'http://localhost:3000/public/uploads/20240103_10000200000127379011.pdf'*/
   formData: FormData;
-  currentZoom = 1
+  currentZoom = 1;
+  mouseEventTracker = document.getElementById('viewer')
 
   constructor(private  http: HttpClient) {
     this.formData = new FormData();
+
   }
 
   onFileChange(event: any) {
@@ -45,5 +46,7 @@ export class UploadInvoiceComponent {
     }
 
   }
+
+
 
 }
