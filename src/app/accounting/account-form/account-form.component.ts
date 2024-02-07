@@ -22,12 +22,13 @@ export class AccountFormComponent  implements OnInit, OnDestroy {
   stamp: HTMLImageElement;
   stampUrl: string;
   filename: string;
+  pdfName: string = '';
   private resetSubscription: Subscription;
+  invoices: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private http: HttpClient,
     private loadingService: LoadPdfService,
     private accountingService: AccountingService,
     private resetService: ResetService
@@ -39,6 +40,8 @@ export class AccountFormComponent  implements OnInit, OnDestroy {
     this.resetSubscription = this.resetService.resetFormAction$.subscribe( () => {
       this.accountingForm.reset();
       this.accountings.clear();
+      this.pdfName = '';
+      this.invoices = [];
     })
   }
 
@@ -77,9 +80,6 @@ export class AccountFormComponent  implements OnInit, OnDestroy {
     this.accountings.removeAt(id);
   }
 
-  submitAccounting() {
-    console.log(this.accountingForm)
-  }
   saveAndLoad(accountingForm:FormGroup) {
     this.dialog.open(SaveAndStampComponent, {
       data: {accountingForm},
@@ -87,8 +87,6 @@ export class AccountFormComponent  implements OnInit, OnDestroy {
       height: '300px'
     })
   }
-
-
 
   toPng(imageName: string){
     if (this.accountingForm.invalid) {
@@ -115,7 +113,6 @@ export class AccountFormComponent  implements OnInit, OnDestroy {
         const arrayBuffer = await blob.arrayBuffer();
         await this.addImageToPdf(arrayBuffer)
       })
-
     })
 
   }
@@ -129,7 +126,7 @@ export class AccountFormComponent  implements OnInit, OnDestroy {
     const imageUrl = this.stampUrl; // Your image base64
     const imageBytes = await fetch(imageUrl).then(res => res.arrayBuffer());
     const image = await pdfDoc.embedPng(imageBytes);
-    const pngDims = image.scale(0.4)
+    const pngDims = image.scale(0.5)
 
     // Add the image to the first page of the PDF
     const pages = pdfDoc.getPages();
@@ -150,10 +147,19 @@ export class AccountFormComponent  implements OnInit, OnDestroy {
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
-    const filename = this.accountingForm.get('filename')?.value === '' ? `worldline_${this.accountingForm.get('payDate')!.value}` : this.accountingForm.get('filename')!.value;
-    link.download = `${filename}.pdf`;
+    this.generatePdfName();
+
+    link.download = `${this.pdfName}.pdf`;
     link.click();
-    this.accountingForm.reset();
+  }
+
+  generatePdfName() {
+    this.getAccountings().forEach((invoice, index) => {
+      if (!this.invoices.includes(invoice.get('invoice')?.value)) {
+        this.invoices.push(invoice.get('invoice')?.value);
+      }
+    })
+    this.pdfName = this.accountingForm.get('filename')?.value === '' || this.accountingForm.get('filename')?.value === null ? `worldline_${this.accountingForm.get('payDate')!.value}_${this.invoices.join('_')}` : this.accountingForm.get('filename')!.value;
   }
 
   ngOnDestroy() {

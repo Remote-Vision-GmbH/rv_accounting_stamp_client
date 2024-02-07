@@ -20,48 +20,8 @@ export class LoadPdfService {
     }).pipe(catchError(this.handleError))
   }
 
-  getPdf(filePath: string) {
-
-  }
-
-
   getFile(filePath: string): Observable<Blob>{
     return this.http.get(filePath, {responseType: 'blob'}).pipe(catchError(this.handleError))
-  }
-
-  async addImageToPdf(pdfBuffer: ArrayBuffer, stamp: string) {
-    // Load a PDFDocument from the existing PDF buffer
-    const pdfDoc = await PDFDocument.load(pdfBuffer);
-
-    // Embed the image into the PDF. Assuming the image is in PNG format
-    // For example, let's say you have the image as a base64 string
-    const imageUrl = stamp; // Your image base64
-    const imageBytes = await fetch(imageUrl).then(res => res.arrayBuffer());
-    const image = await pdfDoc.embedPng(imageBytes);
-    const pngDims = image.scale(0.4)
-
-    // Add the image to the first page of the PDF
-    const pages = pdfDoc.getPages();
-    const firstPage = pages[0];
-    // Position (x, y) and size (width, height) for the image
-    firstPage.drawImage(image, {
-      x: 50,
-      y: 70,
-      width: pngDims.width,
-      height: pngDims.height
-    });
-
-    // Serialize the PDFDocument to bytes (a Uint8Array)
-    const pdfBytes = await pdfDoc.save();
-
-    // Do something with the modified PDF (e.g., download or display it)
-    // This step depends on your specific requirements
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'modified-pdf.pdf';
-    link.click();
-
   }
 
   handleError(error: HttpErrorResponse) {
