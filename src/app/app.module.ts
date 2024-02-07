@@ -16,6 +16,8 @@ import {MatDialogActions, MatDialogClose, MatDialogContent} from "@angular/mater
 import {MatButton} from "@angular/material/button";
 import { StampPositioningDirective } from './stamp-positioning.directive';
 import {AppComponent} from "./app.component";
+import {MatIcon} from "@angular/material/icon";
+import { HeaderComponent } from './header/header.component';
 
 
 
@@ -27,6 +29,7 @@ import {AppComponent} from "./app.component";
     AccountingComponent,
     SaveAndStampComponent,
     StampPositioningDirective,
+    HeaderComponent,
 
   ],
   imports: [
@@ -40,6 +43,7 @@ import {AppComponent} from "./app.component";
     MatDialogActions,
     MatDialogClose,
     MatButton,
+    MatIcon,
 
   ],
   providers: [],

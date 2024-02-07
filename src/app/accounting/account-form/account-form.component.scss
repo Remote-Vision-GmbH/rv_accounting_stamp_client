@@ -1,7 +1,7 @@
 form {
   .form-group {
     display: grid;
-    grid-template-columns: repeat(2, 100px) repeat(2, 150px) 50px;
+    grid-template-columns: repeat(3, 1fr) 2fr repeat(2, 1fr);
     gap: 1rem;
     margin-top: .5rem;
   }
@@ -23,4 +23,27 @@ form {
 
 table td {
   padding: .5rem;
+}
+
+input::placeholder {
+  font-size: .7rem;
+  color: darkgrey;
+}
+
+input.ng-invalid:not(.ng-untouched) {
+  border: 1px solid deeppink;
+}
+.with-helper > div {
+  position: relative;
+}
+
+.with-helper::after {
+  content: 'notwendig';
+  position: absolute;
+  font-size: .6rem;
+  color: deeppink;
+  margin-top: 0;
+  float: right;
+  opacity: .5;
+  font-weight: bold;
 }

@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
-import { HttpClient } from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {AccountingService} from "../services/accounting.service";
+import {LoadPdfService} from "../load-pdf.service";
+import {ResetService} from "../reset.service";
 
 @Component({
   selector: 'app-upload-invoice',
@@ -10,18 +12,17 @@ import {AccountingService} from "../services/accounting.service";
 })
 export class UploadInvoiceComponent {
 
-/*  pdfSrc = 'http://localhost:3000/public/uploads/20240103_10000200000127379011.pdf'*/
   formData: FormData;
   currentZoom = 1;
-
   pdfSrc: string = '';
   selectedFile: File | null = null;
-  filename: string;
+
 
   constructor(
-
     private accountingService: AccountingService,
-    private http: HttpClient
+    private http: HttpClient,
+    private loadingService: LoadPdfService,
+    private resetService: ResetService
   ) {
     this.formData = new FormData();
   }
@@ -40,30 +41,27 @@ export class UploadInvoiceComponent {
 
     const formData = new FormData();
     formData.append('file', this.selectedFile, this.selectedFile.name);
-
-    this.http.post<{name: string}>('http://localhost:3000/upload', formData, {
-      headers: {
-        'Accept': 'application/json',
+    this.loadingService.sendFile(formData).subscribe({
+      next: (response) => {
+        this.pdfSrc = `http://localhost:3000/file/${response.name}`;
+        this.accountingService.setFile(response.name);
       },
-      responseType: 'json',
-    })
-      .subscribe({
-        next: (response) => {
-          this.filename = response.name;
-          this.pdfSrc = `http://localhost:3000/file/${this.filename}`;
-        },
-        error: (error) => console.error(error)
-      });
+      error: (error) => console.error(error)
+    });
   }
 
   zoomFile() {
-    if(this.currentZoom === 1.75)  {
+    if (this.currentZoom === 1.75) {
       this.currentZoom = 1
     } else {
       this.currentZoom = 1.75
     }
   }
 
+  newPDF() {
+    this.pdfSrc = '';
+    this.resetService.triggerResetForm();
+  }
 
 
 }

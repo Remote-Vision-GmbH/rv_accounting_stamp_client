@@ -1,6 +1,6 @@
 form .form-group {
   display: grid;
-  grid-template-columns: repeat(2, 100px) repeat(2, 150px) 50px;
+  grid-template-columns: repeat(3, 1fr) 2fr repeat(2, 1fr);
   gap: 1rem;
   margin-top: 0.5rem;
 }
@@ -20,6 +20,30 @@ form .form-group {
 
 table td {
   padding: 0.5rem;
+}
+
+input::placeholder {
+  font-size: 0.7rem;
+  color: darkgrey;
+}
+
+input.ng-invalid:not(.ng-untouched) {
+  border: 1px solid deeppink;
+}
+
+.with-helper > div {
+  position: relative;
+}
+
+.with-helper::after {
+  content: "notwendig";
+  position: absolute;
+  font-size: 0.6rem;
+  color: deeppink;
+  margin-top: 0;
+  float: right;
+  opacity: 0.5;
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=account-form.component.css.map */
